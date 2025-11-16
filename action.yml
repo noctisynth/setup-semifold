@@ -1,0 +1,22 @@
+name: Setup Semifold
+description: Install the semifold CLI
+author: 苏向夜
+
+runs:
+  using: composite
+  steps:
+    - name: Install (Unix)
+      if: runner.os != 'Windows'
+      shell: bash
+      run: |
+        curl -L https://semifold.noctisynth.org/install/install.sh | sh
+        echo "${HOME}/.local/bin" >> "$GITHUB_PATH"
+
+    # Windows (PowerShell)
+    - name: Install (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        Invoke-WebRequest -Uri "https://semifold.noctisynth.org/install/install.ps1" -OutFile install.ps1
+        powershell -ExecutionPolicy Bypass -File install.ps1
+        echo "$env:USERPROFILE\.local\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
