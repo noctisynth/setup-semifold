@@ -23,6 +23,15 @@ jobs:
 
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
       - name: Run noctisynth/setup-semifold
         uses: ./
+      - name: Verify Semifold installation
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            $env:PATH += ";$env:USERPROFILE\.local\bin"
+          else
+            export PATH="$HOME/.local/bin:$PATH"
+          fi
+          semifold --version
